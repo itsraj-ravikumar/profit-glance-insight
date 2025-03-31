@@ -5,11 +5,15 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Search, Plus, Filter, ArrowUpRight, ArrowDownRight } from "lucide-react";
+import { Search, Plus, Filter, ArrowUpRight, ArrowDownRight, Download } from "lucide-react";
 import { AIPredictionCard } from "@/components/ai/AIPredictionCard";
+import { useToast } from "@/components/ui/use-toast";
+import { useState } from "react";
 
 const Portfolio = () => {
-  // Sample portfolio data
+  const { toast } = useToast();
+  const [searchQuery, setSearchQuery] = useState("");
+  
   const portfolioItems = [
     {
       id: 1,
@@ -98,6 +102,58 @@ const Portfolio = () => {
     { category: "Regulatory Risk", value: 20 },
   ];
 
+  const filteredPortfolioItems = portfolioItems.filter(item => 
+    item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    item.category.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const handleExportData = () => {
+    try {
+      const headers = ["Name", "Category", "Value", "Allocation", "Performance", "Risk"];
+      const rows = portfolioItems.map(item => [
+        item.name,
+        item.category,
+        `$${item.value}`,
+        `${item.allocation}%`,
+        `${item.performance}%`,
+        item.risk
+      ]);
+      
+      const csvContent = [
+        headers.join(","),
+        ...rows.map(row => row.join(","))
+      ].join("\n");
+      
+      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.setAttribute("href", url);
+      link.setAttribute("download", "portfolio_data.csv");
+      link.style.visibility = "hidden";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      
+      toast({
+        title: "Export Successful",
+        description: "Portfolio data has been exported as CSV",
+      });
+    } catch (error) {
+      toast({
+        title: "Export Failed",
+        description: "There was an error exporting the data",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleAddInvestment = () => {
+    toast({
+      title: "Add Investment",
+      description: "Investment creation form would open here",
+    });
+  };
+
   return (
     <DashboardLayout>
       <div className="animate-fade-in">
@@ -109,8 +165,12 @@ const Portfolio = () => {
             </p>
           </div>
           <div className="flex gap-2 mt-4 md:mt-0">
-            <Button variant="outline">Export Data</Button>
-            <Button>Add Investment</Button>
+            <Button variant="outline" onClick={handleExportData}>
+              <Download className="h-4 w-4 mr-2" /> Export Data
+            </Button>
+            <Button onClick={handleAddInvestment}>
+              <Plus className="h-4 w-4 mr-2" /> Add Investment
+            </Button>
           </div>
         </div>
 
@@ -232,13 +292,22 @@ const Portfolio = () => {
                 <Input
                   placeholder="Search investments..."
                   className="pl-9"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
                 />
               </div>
               <div className="flex gap-2 w-full md:w-auto">
-                <Button variant="outline" className="gap-1">
+                <Button 
+                  variant="outline" 
+                  className="gap-1"
+                  onClick={() => toast({
+                    title: "Filter Applied",
+                    description: "Filtering options would appear here", 
+                  })}
+                >
                   <Filter className="h-4 w-4" /> Filter
                 </Button>
-                <Button className="gap-1">
+                <Button className="gap-1" onClick={handleAddInvestment}>
                   <Plus className="h-4 w-4" /> Add Investment
                 </Button>
               </div>
@@ -269,7 +338,7 @@ const Portfolio = () => {
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
-                  {portfolioItems.map((item) => (
+                  {filteredPortfolioItems.map((item) => (
                     <tr key={item.id} className="hover:bg-gray-50">
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                         {item.name}

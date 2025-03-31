@@ -14,6 +14,7 @@ import Portfolio from "./pages/Portfolio";
 import Transactions from "./pages/Transactions";
 import Notifications from "./pages/Notifications";
 import Profile from "./pages/Profile";
+import Settings from "./pages/Settings"; // Import Settings page
 import Login from "./pages/Login"; // Import Login page
 import { useAuth } from "./contexts/AuthContext"; // Import useAuth
 
@@ -43,6 +44,7 @@ const AppRoutes = () => {
       <Route path="/transactions" element={<ProtectedRoute><Transactions /></ProtectedRoute>} />
       <Route path="/notifications" element={<ProtectedRoute><Notifications /></ProtectedRoute>} />
       <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+      <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
       {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
       <Route path="*" element={<NotFound />} />
     </Routes>
