@@ -1,4 +1,3 @@
-
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import { MetricChart } from "@/components/dashboard/MetricChart";
 import { Button } from "@/components/ui/button";
@@ -7,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Search, Plus, Filter, ArrowUpRight, ArrowDownRight } from "lucide-react";
+import { AIPredictionCard } from "@/components/ai/AIPredictionCard";
 
 const Portfolio = () => {
   // Sample portfolio data
@@ -178,6 +178,44 @@ const Portfolio = () => {
             xAxisKey="month"
             className="lg:col-span-2"
           />
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+          <AIPredictionCard className="lg:col-span-1" />
+          
+          <Card className="lg:col-span-2">
+            <CardHeader>
+              <CardTitle className="text-lg font-semibold">AI-Powered Investment Insights</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <p>
+                Our AI analyzes market trends, portfolio performance, and economic indicators 
+                to provide personalized investment recommendations.
+              </p>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="bg-muted/30 p-4 rounded-lg">
+                  <h3 className="font-medium mb-2 text-sm">Portfolio Optimization</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Based on AI analysis, consider reallocating 5% from Cash Reserves to Tech Growth Fund 
+                    to potentially increase annual returns by 0.3%.
+                  </p>
+                </div>
+                
+                <div className="bg-muted/30 p-4 rounded-lg">
+                  <h3 className="font-medium mb-2 text-sm">Risk Assessment</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Current portfolio risk score (38/100) is within your target range. 
+                    International exposure could be reduced by 2% to further minimize volatility.
+                  </p>
+                </div>
+              </div>
+              
+              <Button variant="outline" className="w-full mt-2">
+                View Detailed AI Analysis
+              </Button>
+            </CardContent>
+          </Card>
         </div>
 
         <Tabs defaultValue="investments" className="mb-6">
