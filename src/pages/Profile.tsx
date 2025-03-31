@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import { Button } from "@/components/ui/button";
@@ -8,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
-import { Badge } from "@/components/ui/badge"; // Added Badge import
+import { Badge } from "@/components/ui/badge";
 import {
   User,
   Settings,
@@ -22,18 +21,24 @@ import {
   AtSign,
   Smartphone,
   Edit,
-  Check, // Added Check import
+  Check,
+  LogOut
 } from "lucide-react";
 import { toast } from "@/components/ui/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+
   const [userData, setUserData] = useState({
-    firstName: "Alex",
-    lastName: "Thompson",
-    email: "alex.thompson@example.com",
+    firstName: user?.firstName || "Alex",
+    lastName: user?.lastName || "Thompson",
+    email: user?.email || "alex.thompson@example.com",
     phone: "+1 (555) 123-4567",
-    title: "Investment Manager",
-    company: "Global Financial Partners",
+    title: user?.title || "Investment Manager",
+    company: user?.company || "Global Financial Partners",
     bio: "Financial professional with over 10 years of experience in portfolio management and investment analysis. Specialized in growth strategy and risk assessment for high-net-worth clients.",
   });
 
@@ -50,6 +55,15 @@ const Profile = () => {
     transactionAlerts: true,
     sessionTimeout: "30 minutes",
   });
+
+  const handleLogout = () => {
+    logout();
+    toast({
+      title: "Logged out",
+      description: "You have been successfully logged out.",
+    });
+    navigate("/login");
+  };
 
   const handleSaveProfile = () => {
     toast({
@@ -82,6 +96,14 @@ const Profile = () => {
               Manage your account settings and preferences
             </p>
           </div>
+          <Button 
+            variant="outline" 
+            className="mt-4 md:mt-0 flex items-center gap-2" 
+            onClick={handleLogout}
+          >
+            <LogOut className="h-4 w-4" />
+            Logout
+          </Button>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
@@ -90,7 +112,7 @@ const Profile = () => {
               <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
                 <div className="relative">
                   <div className="h-24 w-24 rounded-full bg-finance-blue flex items-center justify-center text-white text-2xl font-semibold">
-                    AT
+                    {userData.firstName[0]}{userData.lastName[0]}
                   </div>
                   <Button
                     size="icon"
