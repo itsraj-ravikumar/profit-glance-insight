@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
+import { Badge } from "@/components/ui/badge"; // Added Badge import
 import {
   User,
   Settings,
@@ -21,6 +22,7 @@ import {
   AtSign,
   Smartphone,
   Edit,
+  Check, // Added Check import
 } from "lucide-react";
 import { toast } from "@/components/ui/use-toast";
 
